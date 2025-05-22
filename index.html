@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebAR 6 Models</title>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+  <script type="module">
+    import { MindARThree } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-three.prod.js';
+    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.150.1/examples/jsm/loaders/GLTFLoader.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const mindarThree = new MindARThree({
+        container: document.body,
+        imageTargetSrc: './targets2.mind',
+      });
+      const { renderer, scene, camera } = mindarThree;
+
+      const loader = new GLTFLoader();
+
+      // Helper: Load and add model to anchor
+      const loadModel = (index, modelPath, scale = 0.5) => {
+        const anchor = mindarThree.addAnchor(index);
+        loader.load(modelPath, (gltf) => {
+          const model = gltf.scene;
+          model.scale.set(scale, scale, scale);
+          anchor.group.add(model);
+        });
+      };
+
+      // Load 6 models with corresponding targets
+      loadModel(0, './_อีกัวนา_0519041443_texture.glb');
+      loadModel(1, './Booby_on_the_Rocks_0519041549_texture.glb');
+      loadModel(2, './Majestic_Tortoise_Str_0519041504_texture.glb');
+      loadModel(3, './นกกระจอ_0521090051_texture.glb');
+      loadModel(4, './นกเพนกว_0521084959_texture.glb');
+      loadModel(5, './นกฟินช์_0519041534_texture.glb');
+
+      await mindarThree.start();
+      renderer.setAnimationLoop(() => {
+        renderer.render(scene, camera);
+      });
+    });
+  </script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body></body>
+</html>
